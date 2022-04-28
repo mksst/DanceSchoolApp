@@ -1,18 +1,13 @@
-//Core
-import React, { VFC } from "react";
 import { observer } from "mobx-react-lite";
+import React from "react";
+import { Navigate } from "react-router-dom";
 
-//Router
-import { Navigate } from "react-router";
-
-//Hooks
 import { useMainStore } from "../../hooks/useMainStore";
+import { MainPage } from "../MainPage";
 
-export const RedirectPage: VFC = observer(() => {
+export const RedirectPage = observer(() => {
+  const { token } = useMainStore();
 
-    const { getToken } = useMainStore();
-    const token = getToken();
-
-    if (token) return <Navigate to={"/main"} />
-    return <Navigate to={"/login"} />
-})
+  if (!token) return <Navigate to={"/login"} />;
+  return <MainPage />;
+});

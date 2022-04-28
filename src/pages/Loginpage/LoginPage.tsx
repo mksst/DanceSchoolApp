@@ -1,30 +1,43 @@
 //Core
-import React, { VFC } from "react";
-import { URLS } from "../../consts";
-import styled from "styled-components";
-import { observer } from "mobx-react-lite";
-
 //Components
-import { Layout, Typography, Input, Button, Form, Alert } from "antd";
-
-//Router
-import { useNavigate } from "react-router";
-
-//FinalForm
-import { Form as FinalForm, Field } from "react-final-form";
+import { Alert, Button, Form, Input, Layout, Typography } from "antd";
+import axios from "axios";
 import { FORM_ERROR } from "final-form";
+import { observer } from "mobx-react-lite";
+import React, { VFC } from "react";
+//FinalForm
+import { Field, Form as FinalForm } from "react-final-form";
+//Router
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 //Images
 import DanceLayout from "../../assets/images/dance.png";
-
+import { URLS } from "../../consts";
 //Hooks & Stores
 import { useMainStore } from "../../hooks/useMainStore";
-import { userConfig } from "../../users";
-import axios from "axios";
+
+export interface userConfig {
+  login: string;
+  password?: string;
+  name: string;
+  phone: string;
+  email: string;
+  accountType: "user" | "admin" | "coach";
+}
 
 interface ILoginValues {
   login: string;
   password: string;
+}
+
+export interface userConfig {
+  login: string;
+  password?: string;
+  name: string;
+  phone: string;
+  email: string;
+  accountType: "user" | "admin" | "coach";
 }
 
 const Container = styled.div`
@@ -70,13 +83,16 @@ export const LoginPage: VFC = observer(() => {
         login,
         password,
       });
-      console.log(response);
-      //setUserConfig(response);
-      //setToken(response.token);
+      const {
+        data: { user, token },
+      } = response;
+
+      setUserConfig(user);
+      setToken(token);
+      navigate("/");
     } catch (e) {
       console.error(e);
     }
-    //navigate("/main")
   };
 
   return (
@@ -122,12 +138,7 @@ export const LoginPage: VFC = observer(() => {
                   <Button htmlType="submit" block loading={submitting}>
                     Войти
                   </Button>
-                  <Button
-                    type="text"
-                    block
-                    loading={submitting}
-                    onClick={handleRedirectToRegiter}
-                  >
+                  <Button type="text" block onClick={handleRedirectToRegiter}>
                     Регистрация
                   </Button>
                 </form>

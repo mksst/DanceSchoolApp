@@ -1,23 +1,20 @@
 //Core
-import React, { VFC } from "react";
-import styled from "styled-components";
-import axios from "axios";
-import { URLS } from "../../consts";
-import { observer } from "mobx-react-lite";
-
 //Components
-import { Layout, Typography, Input, Button, Form, Alert } from "antd";
-
-//Router
-import { useNavigate } from "react-router";
-
-//FinalForm
-import { Form as FinalForm, Field } from "react-final-form";
+import { Alert, Button, Form, Input, Layout, Typography } from "antd";
+import axios from "axios";
 import { FORM_ERROR } from "final-form";
+import { observer } from "mobx-react-lite";
+import React, { VFC } from "react";
+import { useState } from "react";
+//FinalForm
+import { Field, Form as FinalForm } from "react-final-form";
+//Router
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 //Images
 import DanceLayout from "../../assets/images/dance.png";
-import { useState } from "react";
+import { URLS } from "../../consts";
 
 interface IRegisterValues {
   login: string;
@@ -73,6 +70,8 @@ export const RegisterPage: VFC = observer(() => {
         phone,
         email,
         password,
+        // 0 - user, 1 - teacher
+        accountType: 0,
       });
       console.log(response);
       // if (!response)

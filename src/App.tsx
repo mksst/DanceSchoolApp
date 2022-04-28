@@ -1,26 +1,23 @@
 //Core
-import React from "react"
-import { observer } from "mobx-react-lite"
+import AdapterDayjs from "@mui/lab/AdapterDayjs";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { observer } from "mobx-react-lite";
+import React, { VFC } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter } from "react-router-dom";
 
-//Router
-import { Routes, Route, BrowserRouter } from "react-router-dom"
+import { RoutesPage } from "./pages/RoutesPage";
 
-//Components
-import { LoginPage } from "./pages/Loginpage"
-import { MainPage } from "./pages/MainPage"
-import { RedirectPage } from "./pages/RedirectPage"
-import { RegisterPage } from "./pages/RegisterPage"
+export const App: VFC = observer(() => {
+  const queryClient = new QueryClient();
 
-export const App = observer(() => {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path={"/main"} element={<MainPage />} />
-                <Route path={"/login"} element={<LoginPage />} />
-                <Route path={"/register"} element={<RegisterPage />} />
-                <Route path={"/"} element={<RedirectPage />} />
-                {/* <Route path={"*"} element={<Navigate to={"/"} />} /> */}
-            </Routes>
-        </BrowserRouter>
-    )
-})
+  return (
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RoutesPage />
+        </LocalizationProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
+  );
+});
