@@ -16,7 +16,7 @@
     "@types/react-dom": "^17.0.14",
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.23",
-    "antd": "^4.19.5",
+    "antd": "^4.20.5",
     "axios": "^0.26.0",
     "dayjs": "^1.11.0",
     "final-form": "^4.20.6",

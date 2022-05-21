@@ -1,7 +1,7 @@
 import { List, Tag } from "antd";
 import React, { VFC } from "react";
 
-import { IScheduleData } from "../../pages/MainPage";
+import { IScheduleData } from "../../offlineMode";
 import { Modal } from "../Modal";
 
 export const SignUpWorkoutModal: VFC<

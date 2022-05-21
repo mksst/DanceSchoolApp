@@ -6,6 +6,7 @@ interface userConfig {
   login: string;
   password: string;
   name: string;
+  surname: string;
   phone: string;
   email: string;
   accountType: "user" | "admin" | "coach";
@@ -18,6 +19,7 @@ export class MainStore {
     login: "",
     password: "",
     name: "",
+    surname: "",
     phone: "",
     email: "",
     accountType: "user",
@@ -45,6 +47,7 @@ export class MainStore {
         login: "",
         password: "",
         name: "",
+        surname: "",
         phone: "",
         email: "",
         accountType: "user",
@@ -70,7 +73,7 @@ export class MainStore {
 
   getUserConfig = () => this.userConfig;
 
-  setAbonements = (newAbonements: []) => {
+  setAbonements = (newAbonements: any[]) => {
     runInAction(() => {
       this.abonements = newAbonements;
     });
