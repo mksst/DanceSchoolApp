@@ -12,7 +12,7 @@ export const App: VFC = observer(() => {
   const queryClient = new QueryClient();
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/danceschool">
       <QueryClientProvider client={queryClient}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <RoutesPage />
