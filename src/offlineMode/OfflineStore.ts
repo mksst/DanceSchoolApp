@@ -25,6 +25,26 @@ export interface ILessonType {
   name: string;
 }
 
+export interface IHistory {
+  name: string;
+  date: string;
+}
+
+export const history = [
+  {
+    name: "Списание занятия",
+    date: dayjs().subtract(2, "day").format("DD.MM.YYYY"),
+  },
+  {
+    name: "Покупка абонемента",
+    date: dayjs().subtract(10, "day").format("DD.MM.YYYY"),
+  },
+  {
+    name: "Списание занятия",
+    date: dayjs().subtract(7, "day").format("DD.MM.YYYY"),
+  },
+];
+
 export const lessonsTypes = [
   {
     _id: 1,
@@ -222,13 +242,16 @@ export const abonements = [
 export class OfflineStore {
   abonements: any[] = abonements;
   scheduleData: IScheduleData[] = scheduleData;
+  history: IHistory[] = history;
 
   constructor() {
     makeObservable(this, {
       abonements: observable,
       scheduleData: observable,
+      history: observable,
       setOfflineAbonements: action,
       setOfflineScheduleData: action,
+      setOfflineHistory: action,
     });
   }
 
@@ -241,6 +264,12 @@ export class OfflineStore {
   setOfflineScheduleData = (newScheduleData: any[]) => {
     runInAction(() => {
       this.scheduleData = newScheduleData;
+    });
+  };
+
+  setOfflineHistory = (newHistory: any[]) => {
+    runInAction(() => {
+      this.history = newHistory;
     });
   };
 }

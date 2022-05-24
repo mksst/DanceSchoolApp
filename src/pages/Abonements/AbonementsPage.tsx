@@ -2,18 +2,26 @@
 import "antd/dist/antd.css";
 
 //Components & Styles
-import { Button, Card, message, Typography } from "antd";
+import { Button, Card, Typography } from "antd";
 import axios from "axios";
 import dayjs from "dayjs";
 import { observer } from "mobx-react-lite";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { useCallback, useEffect } from "react";
 import styled from "styled-components";
 
+import { BuyAbonementModal } from "../../components/BuyAbonementModal";
 import { URLS } from "../../consts";
 import { useMainStore, useOfflineStore } from "../../hooks";
 import { abonementsTypes } from "../../offlineMode";
 import { getPlural } from "../../utils";
+
+interface Abonement {
+  type: number;
+  workoutCount: number;
+  amount: number;
+  period: number;
+}
 
 const CardWrapper = styled.div`
   display: flex;
@@ -28,11 +36,10 @@ const StyeldCard = styled(Card)`
 
 export const AbonementsPage: FC = observer(() => {
   const { userConfig, setAbonements, getAbonements } = useMainStore();
-  const {
-    abonements,
-    setOfflineAbonements,
-    // setOfflineScheduleData,
-  } = useOfflineStore();
+  const { abonements } = useOfflineStore();
+
+  const [show, setShow] = useState(false);
+  const [abonement, setAbonement] = useState<Abonement | undefined>(undefined);
 
   const fetchAbonements = useCallback(async () => {
     try {
@@ -50,43 +57,10 @@ export const AbonementsPage: FC = observer(() => {
     }
   }, [userConfig, setAbonements]);
 
-  const handleBuyAbonement = useCallback(
-    async (abonementType: number) => {
-      try {
-        if (userConfig.login === "localadmin") {
-          const matchedAbonement = abonementsTypes.find(
-            (abonement) => abonement.type === abonementType,
-          );
-          matchedAbonement &&
-            setOfflineAbonements([
-              ...abonements,
-              {
-                ...matchedAbonement,
-                userID: userConfig._id,
-                purchaseDate: dayjs().format(),
-                expirationDate: dayjs()
-                  .add(matchedAbonement.period, "months")
-                  .format(),
-              },
-            ]);
-          return;
-        }
-        await axios.post(URLS.ABONEMENT, {
-          userID: userConfig._id,
-          name: "basic",
-          expiration: dayjs().format(),
-          workoutCount: 3,
-          amount: 6000,
-        });
-        message.success("Успешная покупка!");
-        fetchAbonements();
-      } catch (e) {
-        message.error("Что-то пошло не так!");
-        console.error(e);
-      }
-    },
-    [abonements, fetchAbonements, userConfig, setOfflineAbonements],
-  );
+  const handleBuyAbonement = useCallback((abonement) => {
+    setAbonement(abonement);
+    setShow(true);
+  }, []);
 
   useEffect(() => {
     fetchAbonements();
@@ -115,13 +89,12 @@ export const AbonementsPage: FC = observer(() => {
         {abonementsTypes.map((abonement) => (
           <StyeldCard
             key={JSON.stringify(abonement)}
-            title={`${getPlural(abonement.workoutCount, [
-              "занятие",
-              "занятия",
-              "занятий",
-            ])}`}
+            title={`${abonement.workoutCount} ${getPlural(
+              abonement.workoutCount,
+              ["занятие", "занятия", "занятий"],
+            )}`}
             extra={
-              <Button onClick={() => handleBuyAbonement(abonement.type)}>
+              <Button onClick={() => handleBuyAbonement(abonement)}>
                 Купить
               </Button>
             }
@@ -132,6 +105,13 @@ export const AbonementsPage: FC = observer(() => {
           </StyeldCard>
         ))}
       </CardWrapper>
+      <BuyAbonementModal
+        showModal={show}
+        setShowModal={setShow}
+        abonement={abonement}
+        fetchAbonements={fetchAbonements}
+        title={"Покупка абонемента"}
+      />
     </>
   );
 });
