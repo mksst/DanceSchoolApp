@@ -9,7 +9,7 @@ export interface IScheduleData {
   duration: number;
   amount: number;
   teacher: string;
-  lessonTypes: string[];
+  lessonTypesIDs: number[];
   freePlaces: number;
 }
 
@@ -19,6 +19,34 @@ export interface ILocation {
   address: string;
   coords: number[];
 }
+
+export interface ILessonType {
+  _id: number;
+  name: string;
+}
+
+export const lessonsTypes = [
+  {
+    _id: 1,
+    name: "Contemporary dance",
+  },
+  {
+    _id: 2,
+    name: "Breakdance",
+  },
+  {
+    _id: 3,
+    name: "Hip-Hop",
+  },
+  {
+    _id: 4,
+    name: "Stretching",
+  },
+  {
+    _id: 5,
+    name: "Yoga",
+  },
+];
 
 export const locations = [
   {
@@ -101,7 +129,7 @@ export const scheduleData: IScheduleData[] = [
     duration: 1,
     amount: 2000,
     teacher: "TestTeacher",
-    lessonTypes: ["Contemporary dance", "Breakdance"],
+    lessonTypesIDs: [1, 2],
     freePlaces: 2,
   },
   {
@@ -112,7 +140,7 @@ export const scheduleData: IScheduleData[] = [
     duration: 1,
     amount: 2000,
     teacher: "TestTeacher",
-    lessonTypes: ["Hip-Hop", "Breakdance"],
+    lessonTypesIDs: [3, 2],
     freePlaces: 2,
   },
   {
@@ -123,7 +151,7 @@ export const scheduleData: IScheduleData[] = [
     duration: 1,
     amount: 2000,
     teacher: "TestTeacher",
-    lessonTypes: ["Yoga"],
+    lessonTypesIDs: [4],
     freePlaces: 2,
   },
   {
@@ -134,7 +162,7 @@ export const scheduleData: IScheduleData[] = [
     duration: 1,
     amount: 2000,
     teacher: "TestTeacher",
-    lessonTypes: ["Stretching, Yoga"],
+    lessonTypesIDs: [5],
     freePlaces: 2,
   },
   {
@@ -145,7 +173,7 @@ export const scheduleData: IScheduleData[] = [
     duration: 2,
     amount: 2000,
     teacher: "TestTeacher",
-    lessonTypes: ["Stretching, Yoga"],
+    lessonTypesIDs: [4, 5],
     freePlaces: 2,
   },
   {
@@ -156,7 +184,7 @@ export const scheduleData: IScheduleData[] = [
     duration: 1,
     amount: 2000,
     teacher: "TestTeacher",
-    lessonTypes: ["Stretching, Yoga"],
+    lessonTypesIDs: [4, 5],
     freePlaces: 2,
   },
   {
@@ -167,7 +195,7 @@ export const scheduleData: IScheduleData[] = [
     duration: 2,
     amount: 2000,
     teacher: "TestTeacher",
-    lessonTypes: ["Stretching, Yoga"],
+    lessonTypesIDs: [4, 5],
     freePlaces: 2,
   },
 ];

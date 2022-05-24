@@ -7,29 +7,29 @@ import { observer } from "mobx-react-lite";
 import React, { useState, VFC } from "react";
 import styled from "styled-components";
 
-//import { UserBar } from "../../components";
+import { UserBar } from "../../components";
 import { AbonementsPage } from "../Abonements";
 import { HistoryPage } from "../HistoryPage";
 import { SchedulePage } from "../SchedulePage";
 
-const LogoContainer = styled.div`
-  float: left;
-  width: 1rem;
-  height: 0.5rem;
+const StyledLayout = styled.div`
+  height: 100%;
+  padding: 0 24px 24px;
 `;
 
-const CurrentTab: VFC<{ tab: number }> = observer(({ tab }) => {
-  switch (tab) {
-    case 0:
-      return <SchedulePage />;
-    case 1:
-      return <AbonementsPage />;
-    case 2:
-      return <HistoryPage />;
-    default:
-      return <></>;
-  }
-});
+const CurrentTab: VFC<{ tab: number; handleSetTab: (tabNum: number) => void }> =
+  observer(({ tab, handleSetTab }) => {
+    switch (tab) {
+      case 0:
+        return <SchedulePage handleBuyAbonement={() => handleSetTab(1)} />;
+      case 1:
+        return <AbonementsPage />;
+      case 2:
+        return <HistoryPage />;
+      default:
+        return <></>;
+    }
+  });
 
 export const MainPage: VFC = observer(() => {
   const { Header, Content } = Layout;
@@ -39,7 +39,7 @@ export const MainPage: VFC = observer(() => {
   return (
     <Layout style={{ height: "100%" }}>
       <Header className="header">
-        <LogoContainer />
+        <UserBar />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
           <Menu.Item key="1" onClick={() => handleSetTab(0)}>
             Расписание
@@ -51,10 +51,9 @@ export const MainPage: VFC = observer(() => {
             История
           </Menu.Item>
         </Menu>
-        {/* <UserBar /> */}
       </Header>
-      <Layout>
-        <Layout style={{ padding: "0 24px 24px" }}>
+      <StyledLayout>
+        <Layout>
           <Content
             className="site-layout-background"
             style={{
@@ -63,10 +62,10 @@ export const MainPage: VFC = observer(() => {
               height: "100%",
             }}
           >
-            <CurrentTab tab={tab} />
+            <CurrentTab tab={tab} handleSetTab={handleSetTab} />
           </Content>
         </Layout>
-      </Layout>
+      </StyledLayout>
     </Layout>
   );
 });

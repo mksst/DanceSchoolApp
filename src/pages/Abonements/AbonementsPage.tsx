@@ -13,6 +13,7 @@ import styled from "styled-components";
 import { URLS } from "../../consts";
 import { useMainStore, useOfflineStore } from "../../hooks";
 import { abonementsTypes } from "../../offlineMode";
+import { getPlural } from "../../utils";
 
 const CardWrapper = styled.div`
   display: flex;
@@ -114,7 +115,11 @@ export const AbonementsPage: FC = observer(() => {
         {abonementsTypes.map((abonement) => (
           <StyeldCard
             key={JSON.stringify(abonement)}
-            title={`${abonement.workoutCount} занятие`}
+            title={`${getPlural(abonement.workoutCount, [
+              "занятие",
+              "занятия",
+              "занятий",
+            ])}`}
             extra={
               <Button onClick={() => handleBuyAbonement(abonement.type)}>
                 Купить

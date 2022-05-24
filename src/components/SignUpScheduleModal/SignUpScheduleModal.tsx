@@ -1,16 +1,26 @@
 import { List, Tag } from "antd";
 import React, { VFC } from "react";
 
-import { IScheduleData } from "../../offlineMode";
+import { useMainStore } from "../../hooks";
+import { abonements, IScheduleData } from "../../offlineMode";
 import { Modal } from "../Modal";
 
 export const SignUpWorkoutModal: VFC<
   {
+    handleBuyAbonement: () => void;
     scheduleData: IScheduleData;
     showModal: boolean;
     setShowModal: React.Dispatch<React.SetStateAction<any>>;
   } & React.ComponentPropsWithoutRef<typeof Modal>
-> = ({ scheduleData, showModal, setShowModal, title, ...props }) => {
+> = ({
+  handleBuyAbonement,
+  scheduleData,
+  showModal,
+  setShowModal,
+  title,
+  ...props
+}) => {
+  const { userConfig } = useMainStore();
   const onSubmit = () => {};
   const onClose = () => setShowModal(false);
 
@@ -29,13 +39,27 @@ export const SignUpWorkoutModal: VFC<
       data.push({ title: signupScheduleModalTitles.get(key), value });
   }
 
+  const availableTrainings = abonements.filter(
+    (training) => training.userID === userConfig._id,
+  );
+
+  const sumOfAvailableTrainings = availableTrainings.reduce(
+    (previousValue, currentValue) => previousValue + currentValue.workoutCount,
+    0,
+  );
+
+  data.push({ title: "Доступно занятий", value: sumOfAvailableTrainings });
+
   return (
     <Modal
       title={title}
       visible={showModal}
-      onOk={onSubmit}
       onCancel={onClose}
       {...props}
+      onOk={sumOfAvailableTrainings > 0 ? onSubmit : handleBuyAbonement}
+      okText={
+        sumOfAvailableTrainings > 0 ? props.okText : "Приобрести абонемент"
+      }
     >
       <List
         itemLayout="horizontal"

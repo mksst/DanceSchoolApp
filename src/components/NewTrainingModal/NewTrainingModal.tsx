@@ -1,13 +1,14 @@
 import { DateTimePicker } from "@mui/lab";
 import { TextField } from "@mui/material";
 import { Divider, Input, Select, Tag, Typography } from "antd";
-import dayjs, { Dayjs } from "dayjs";
-import React, { VFC } from "react";
-import { useState } from "react";
+import { Dayjs } from "dayjs";
+import React, { FC, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 
 import { getTeachers, getTrainingTypes } from "../../api/apiRequests";
+import { useMainStore } from "../../hooks";
+import { ILessonType, lessonsTypes } from "../../offlineMode";
 import { Modal } from "../Modal";
 
 interface ITeacher {
@@ -33,12 +34,13 @@ const ModalWrapper = styled.div`
   flex-direction: column;
 `;
 
-export const NewTrainingModal: VFC<
+export const NewTrainingModal: FC<
   {
     showModal: boolean;
     setShowModal: React.Dispatch<React.SetStateAction<any>>;
   } & React.ComponentPropsWithoutRef<typeof Modal>
 > = ({ showModal, setShowModal, title, ...props }) => {
+  const { userConfig } = useMainStore();
   const [date, setDate] = useState<Dayjs | null>(null);
   const onSubmit = () => {};
   const onClose = () => setShowModal(false);
@@ -46,9 +48,8 @@ export const NewTrainingModal: VFC<
   const { Text } = Typography;
   const { Option } = Select;
 
-  const { data, isLoading } = useQuery("teachers", getTeachers);
+  const teachers = useQuery("teachers", getTeachers);
   const trainingTypes = useQuery("trainingTypes", getTrainingTypes);
-  console.log(data);
 
   return (
     <Modal
@@ -67,15 +68,20 @@ export const NewTrainingModal: VFC<
         />
         <Divider />
         <Select placeholder="Выберите преподавателя">
-          {!isLoading &&
-            data.map((teacher: ITeacher) => (
-              <Option value={teacher._id} key={teacher._id}>
-                <Text>{`${teacher.name} ${teacher.surname}`}</Text>
-              </Option>
-            ))}
+          {(teachers.data || [{ ...userConfig }]).map((teacher: ITeacher) => (
+            <Option value={teacher._id} key={teacher._id}>
+              <Text>{`${teacher.name} ${teacher.surname}`}</Text>
+            </Option>
+          ))}
         </Select>
         <Divider />
-        <Select defaultValue="TeacherOne">
+        <Select placeholder="Выберите вид занятия">
+          {userConfig.login === "localadmin" &&
+            lessonsTypes.map((type: ILessonType) => (
+              <Option value={type._id}>
+                <Tag>{type.name}</Tag>
+              </Option>
+            ))}
           {!trainingTypes.isLoading &&
             trainingTypes.data.map((type: ITrainingType) => (
               <Option value={type._id}>

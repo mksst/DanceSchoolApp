@@ -1,5 +1,5 @@
 import { Avatar, Menu } from "antd";
-import React, { VFC } from "react";
+import React, { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -8,23 +8,29 @@ import { DropDown } from "../DropDown";
 
 const StyledContainer = styled.div`
   float: left;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 200px;
-  height: inherit;
+  width: auto;
+  height: 100%;
+  margin: 0 1rem 0 0;
 `;
 
 const StyledName = styled.span`
-  font-size: 2rem;
+  font-size: 1rem;
   color: white;
 `;
 
-const UserMenu = (): React.ReactElement => {
+const StyledWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  & > span {
+    padding: 0 1rem;
+  }
+`;
+
+const UserMenu: FC = () => {
   const navigate = useNavigate();
   const { clearConfig } = useMainStore();
 
-  const handleSettings = () => navigate("/settings");
+  //const handleSettings = () => navigate("/settings");
   const handleLogOut = () => {
     clearConfig();
     navigate("/login");
@@ -32,21 +38,23 @@ const UserMenu = (): React.ReactElement => {
 
   return (
     <Menu>
-      <Menu.Item onClick={handleSettings}>Настройки</Menu.Item>
+      {/* <Menu.Item onClick={handleSettings}>Настройки</Menu.Item> */}
       <Menu.Item onClick={handleLogOut}>Выход</Menu.Item>
     </Menu>
   );
 };
 
-export const UserBar: VFC = () => {
+export const UserBar: FC = () => {
   const { userConfig } = useMainStore();
 
   return (
-    <DropDown overlay={UserMenu()}>
-      <StyledContainer>
-        <Avatar size="large" />
-        <StyledName>{userConfig.name}</StyledName>
-      </StyledContainer>
-    </DropDown>
+    <StyledContainer>
+      <DropDown overlay={<UserMenu />}>
+        <StyledWrapper>
+          <Avatar size="large" />
+          <StyledName>{userConfig.name}</StyledName>
+        </StyledWrapper>
+      </DropDown>
+    </StyledContainer>
   );
 };
