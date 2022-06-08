@@ -30,6 +30,44 @@ export interface IHistory {
   date: string;
 }
 
+export const users = [
+  {
+    id: 0,
+    name: "Дмитрий",
+    surname: "Волков",
+    abonements: [
+      {
+        id: 0,
+        type: 1,
+        availableLessons: 4,
+      },
+      {
+        id: 1,
+        type: 2,
+        availableLessons: 2,
+      },
+    ],
+  },
+  {
+    id: 1,
+    name: "Юлия",
+    surname: "Сенчук",
+    abonements: [],
+  },
+  {
+    id: 2,
+    name: "Анна",
+    surname: "Коперко",
+    abonements: [
+      {
+        id: 2,
+        type: 2,
+        availableLessons: 2,
+      },
+    ],
+  },
+];
+
 export const history = [
   {
     name: "Списание занятия",
@@ -243,15 +281,18 @@ export class OfflineStore {
   abonements: any[] = abonements;
   scheduleData: IScheduleData[] = scheduleData;
   history: IHistory[] = history;
+  users: any[] = users;
 
   constructor() {
     makeObservable(this, {
       abonements: observable,
       scheduleData: observable,
       history: observable,
+      users: observable,
       setOfflineAbonements: action,
       setOfflineScheduleData: action,
       setOfflineHistory: action,
+      setUsers: action,
     });
   }
 
@@ -270,6 +311,11 @@ export class OfflineStore {
   setOfflineHistory = (newHistory: any[]) => {
     runInAction(() => {
       this.history = newHistory;
+    });
+  };
+  setUsers = (newUsers: any[]) => {
+    runInAction(() => {
+      this.users = newUsers;
     });
   };
 }

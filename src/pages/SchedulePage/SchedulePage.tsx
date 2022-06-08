@@ -2,13 +2,14 @@
 import "antd/dist/antd.css";
 
 //Components & Styles
-import { Button, Segmented, Table, Tag } from "antd";
+import { Button, Segmented, Space, Table, Tag } from "antd";
 import { observer } from "mobx-react-lite";
 import React, { FC, useState } from "react";
 import styled from "styled-components";
 
 import { NewTrainingModal } from "../../components";
 import { SignUpWorkoutModal } from "../../components";
+import { EditWorkoutModal } from "../../components/EditWorkoutModal";
 import { useMainStore, useOfflineStore } from "../../hooks";
 import { IScheduleData, lessonsTypes, locations } from "../../offlineMode";
 
@@ -28,10 +29,13 @@ export const SchedulePage: FC<{ handleBuyAbonement: () => void }> = observer(
       locations[0].id,
     );
     const [showSignupModal, setShowSignupModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
     const [showAddTrainingModal, setShowAddTrainingModal] = useState(false);
     const [currentRecord, setCurrentRecord] = useState<IScheduleData | null>(
       null,
     );
+    const [currentEditREcord, setCurrentEditRecord] =
+      useState<IScheduleData | null>(null);
 
     const getLesson = (id: number) => {
       const lessonsSource =
@@ -42,6 +46,11 @@ export const SchedulePage: FC<{ handleBuyAbonement: () => void }> = observer(
     const handleOpenSignupModal = (record: any) => {
       setCurrentRecord(record);
       setShowSignupModal(true);
+    };
+
+    const handleOpenEditModal = (record: any) => {
+      setCurrentEditRecord(record);
+      setShowEditModal(true);
     };
 
     const handleOpenAddTrainingModal = () => {
@@ -87,9 +96,16 @@ export const SchedulePage: FC<{ handleBuyAbonement: () => void }> = observer(
         title: "Дествия",
         key: "actions",
         render: (record: IScheduleData) => (
-          <Button onClick={() => handleOpenSignupModal(record)}>
-            Записаться
-          </Button>
+          <Space>
+            <Button onClick={() => handleOpenSignupModal(record)}>
+              Записаться
+            </Button>
+            {userConfig.login === "localadmin" && (
+              <Button onClick={() => handleOpenEditModal(record)}>
+                Редактировать
+              </Button>
+            )}
+          </Space>
         ),
       },
     ];
@@ -133,6 +149,14 @@ export const SchedulePage: FC<{ handleBuyAbonement: () => void }> = observer(
             scheduleData={currentRecord}
             cancelText={"Отмена"}
             okText={"Записаться"}
+          />
+        )}
+        {currentEditREcord && (
+          <EditWorkoutModal
+            title={`Редактировать запись`}
+            showModal={showEditModal}
+            setShowModal={setShowEditModal}
+            scheduleData={currentEditREcord}
           />
         )}
       </>

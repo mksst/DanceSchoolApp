@@ -11,6 +11,7 @@ import { useCallback, useEffect } from "react";
 import styled from "styled-components";
 
 import { BuyAbonementModal } from "../../components/BuyAbonementModal";
+import { EditUserAbonements } from "../../components/EditUsersAbonements";
 import { URLS } from "../../consts";
 import { useMainStore, useOfflineStore } from "../../hooks";
 import { abonementsTypes } from "../../offlineMode";
@@ -68,9 +69,14 @@ export const AbonementsPage: FC = observer(() => {
 
   const { Title } = Typography;
 
+  const [isShowSetUserAbonements, setIsShowSetUserAbonements] = useState(false);
+
   return (
     <>
       <Title level={2}>{"Текущие абонементы"}</Title>
+      <Button onClick={() => setIsShowSetUserAbonements(true)}>
+        Редактирование пользовательских абонементов
+      </Button>
       <CardWrapper>
         {(userConfig.login === "localadmin" ? abonements : getAbonements()).map(
           (abonement) => (
@@ -105,6 +111,12 @@ export const AbonementsPage: FC = observer(() => {
           </StyeldCard>
         ))}
       </CardWrapper>
+      {userConfig.login === "localadmin" && (
+        <EditUserAbonements
+          showModal={isShowSetUserAbonements}
+          setShowModal={setIsShowSetUserAbonements}
+        />
+      )}
       <BuyAbonementModal
         showModal={show}
         setShowModal={setShow}
