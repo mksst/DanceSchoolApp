@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/danceschool/static/css/main.1e974d06.css",
-    "main.js": "/danceschool/static/js/main.a0f8249e.js",
+    "main.js": "/danceschool/static/js/main.8aeee514.js",
     "static/media/dance.png": "/danceschool/static/media/dance.0f639160e50cb3e716a6.png",
     "static/media/dance.jpg": "/danceschool/static/media/dance.95f24c57aa7b008bad8d.jpg",
     "index.html": "/danceschool/index.html",
     "main.1e974d06.css.map": "/danceschool/static/css/main.1e974d06.css.map",
-    "main.a0f8249e.js.map": "/danceschool/static/js/main.a0f8249e.js.map"
+    "main.8aeee514.js.map": "/danceschool/static/js/main.8aeee514.js.map"
   },
   "entrypoints": [
     "static/css/main.1e974d06.css",
-    "static/js/main.a0f8249e.js"
+    "static/js/main.8aeee514.js"
   ]
 }
